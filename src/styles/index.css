@@ -1,0 +1,51 @@
+html, body {
+  font-family: sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  height: 100%; }
+
+.app {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; }
+
+.toolbar {
+  height: 20px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  flex-grow: 1; }
+  .toolbar .toolbar-browse {
+    flex: 1;
+    flex-grow: 1; }
+  .toolbar .toolbar-files {
+    flex: 1;
+    flex-grow: 1; }
+  .toolbar .toolbar-main {
+    flex: 1;
+    flex-grow: 1; }
+
+.app-body {
+  flex: 1 100%;
+  flex-grow: 1;
+  flex-direction: row;
+  display: flex;
+  background-color: #ddd;
+  height: 100%; }
+  .app-body .file-browser {
+    flex: 1;
+    flex-grow: 1;
+    display: flex;
+    background-color: #bbb;
+    height: 100%; }
+  .app-body .page-list {
+    flex: 1;
+    flex-grow: 1;
+    display: flex;
+    background-color: #999; }
+  .app-body .image-viewer {
+    flex: 1;
+    flex-grow: 1;
+    display: flex;
+    background-color: #777; }
