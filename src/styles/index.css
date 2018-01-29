@@ -38,12 +38,14 @@ html, body {
     flex-grow: 1;
     display: flex;
     background-color: #bbb;
-    height: 100%; }
+    height: 100%;
+    flex-direction: column; }
   .app-body .page-list {
     flex: 1;
     flex-grow: 1;
     display: flex;
-    background-color: #999; }
+    background-color: #999;
+    flex-direction: column; }
   .app-body .image-viewer {
     flex: 1;
     flex-grow: 1;

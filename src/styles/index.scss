@@ -48,7 +48,7 @@ html, body {
     display: flex;
     background-color: #bbb;
     height: 100%;
-  
+    flex-direction: column;
   }
 
   .page-list {
@@ -57,10 +57,10 @@ html, body {
     flex-grow: 1;
     display: flex;
     background-color: #999;
+    flex-direction: column;
   }
 
   .image-viewer {
-
     flex: 1;
     flex-grow: 1;
     display: flex;
