@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { join as joinPath } from 'path';
+import { encodePath } from '../../utils';
 import c from 'classnames';
 
 const ROOT = 'http://cz-api.csli.me/files';
@@ -7,6 +8,7 @@ const ROOT = 'http://cz-api.csli.me/files';
 export default class FileList extends Component {
   state = { files: [], openFiles: {}, loading: false, open: false };
   files = {};
+
   componentDidMount () {
     if (this.props.autoload) {
       this.load();
@@ -17,7 +19,7 @@ export default class FileList extends Component {
     const path = this.props.path;
     this.setState({ loading: true, open: true });
     try {
-      const response = await fetch(ROOT + path);
+      const response = await fetch(`${ROOT}/${encodePath(path)}`);
       const files = await response.json();
 
       this.setState({ files, loading: false });
@@ -61,7 +63,7 @@ export default class FileList extends Component {
     const { loading, files } = this.state;
     return (
       <div className="file-list">
-        {loading && <h2>Loading ...</h2>}
+        {loading && <div>Loading ...</div>}
         {children}
         {
           files.map(file => (
