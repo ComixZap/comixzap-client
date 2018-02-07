@@ -3,10 +3,14 @@ import FileList from './FileList';
 
 export default class Browser extends Component {
 
+  onFileClick = (path, file) => {
+    this.props.onFileClick(path, file);
+  }
+
   render () {
     return (
       <div className="file-browser">
-        <FileList path="/" autoload={true} />
+        <FileList onFileClick={this.onFileClick} open path="/" autoload={true} />
       </div>
     )
   }

@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { join as joinPath } from 'path';
+import c from 'classnames';
 
 const ROOT = 'http://cz-api.csli.me/files';
 
 export default class FileList extends Component {
-  state = { files: [], loading: false };
+  state = { files: [], openFiles: {}, loading: false, open: false };
+  files = {};
   componentDidMount () {
     if (this.props.autoload) {
       this.load();
@@ -12,7 +15,7 @@ export default class FileList extends Component {
 
   async load () {
     const path = this.props.path;
-    this.setState({ loading: true });
+    this.setState({ loading: true, open: true });
     try {
       const response = await fetch(ROOT + path);
       const files = await response.json();
@@ -26,14 +29,35 @@ export default class FileList extends Component {
   onClick = (event) => {
     event.stopPropagation();
     event.preventDefault();
-
-    console.log(this.props.onClick);
     this.load();
   }
 
+  toggleOpen (ino) {
+    this.setState({
+      openFiles: {
+        ...this.state.openFiles,
+        [ino]: !this.state.openFiles[ino]
+      }
+    });
+  }
+
+  curryOnFolderClick = (ino) => (event) => {
+    if (!this.state.openFiles[ino]) {
+      this.files[ino].load();
+    }
+    this.toggleOpen(ino);
+  }
+
+  curryOnFileClick = (file) => (event) => {
+    this.onFileClick(this.props.path, file);
+  }
+
+  onFileClick = (path, file) => {
+    this.props.onFileClick(path, file);
+  }
 
   render () {
-    const { path, children } = this.props;
+    const { path, children, open } = this.props;
     const { loading, files } = this.state;
     return (
       <div className="file-list">
@@ -43,17 +67,20 @@ export default class FileList extends Component {
           files.map(file => (
             file.directory ? (
               <div key={file.ino} className="folder">
-                <FileList path={ path + '/' + file.filename} onClick={this.props.onClick}>
-                  <span onClick={this.onClick}>
-                    <i className="icon">{"📁"}</i>
-                    {file.filename}
-                  </span>
-                </FileList>
+                <span onClick={this.curryOnFolderClick(file.ino)}>
+                  <i className="icon">{this.state.openFiles[file.ino] ? "📂" : "📁"}</i>
+                  {file.filename}
+                </span>
+                <div className={c("folder-contents", { open: this.state.openFiles[file.ino] })}>
+                  <FileList onFileClick={this.onFileClick} open={this.state.openFiles[file.ino]} ref={r => this.files[file.ino] = r} path={joinPath(path, file.filename)} />
+                </div>
               </div>
             ) : (
-              <div className="file">
-                <i className="icon">{"📙"}</i>
-                <span>{file.filename}</span>
+              <div key={file.ino} className="file">
+                <span onClick={this.curryOnFileClick(file)}>
+                  <i className="icon">{"📙"}</i>
+                  {file.filename}
+                </span>
               </div>
             )
           ))
