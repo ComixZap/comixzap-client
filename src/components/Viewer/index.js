@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import { join as joinPath } from 'path';
 import { encodePath } from '../../utils';
 
-const ROOT = 'http://cz-api.csli.me/files';
-
 export default class Viewer extends Component {
   state = { zoom: 100 };
 
   async load (path, file, page) {
     this.setState({ loading: true });
     try {
-      const image = `${ROOT}/${encodePath(joinPath(path, file.filename))}?action=extract&extract=${encodePath(page)}`;
+      const image = `${this.props.config.root}/${encodePath(joinPath(path, file.filename))}?action=extract&extract=${encodePath(page)}`;
       await new Promise((resolve, reject) => {
         const img = new Image();
         img.src = image;

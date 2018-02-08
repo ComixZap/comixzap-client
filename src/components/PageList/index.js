@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { join as joinPath } from 'path';
+import c from 'classnames';
+import sortBy from 'lodash/sortBy';
 import { encodePath } from '../../utils';
-
-const ROOT = 'http://cz-api.csli.me/files';
 
 export default class PageList extends Component {
   state = { pages: [] };
@@ -11,14 +11,10 @@ export default class PageList extends Component {
     this.setState({ path, file });
     try {
       this.setState({ loading: true, error: null });
-      const response = await fetch(`${ROOT}/${encodePath(joinPath(path, file.filename))}?action=list`);
+      const response = await fetch(`${this.props.config.root}/${encodePath(joinPath(path, file.filename))}?action=list`);
       const pagesList = await response.json();
-      const pages = pagesList.filter(page => page.usize).sort((a, b) => {
-        const aname = a.filename.toLowerCase();
-        const bname = b.filename.toLowerCase();
-        return aname > bname ? 1 : aname < bname ? -1 : 0;
-      });
-      this.setState({ loading: false, pages: pages });
+      const pages = sortBy(pagesList.filter(page => page.usize), p => p.filename.toLowerCase());
+      this.setState({ loading: false, pages: pages, currentPage: 1 });
       this.props.onLoad();
     } catch (err) {
       this.setState({ loading: false, error: err.message });
@@ -31,12 +27,11 @@ export default class PageList extends Component {
 
   onPageClick = (page) => {
     const { path, file } = this.state;
-    console.log(page, path, file)
     this.props.onPageClick(path, file, page);
   }
 
   render () {
-    const { path, file, error, loading, pages } = this.state;
+    const { file, error, loading, pages, currentPage } = this.state;
     return (
       <div className="page-list">
         {file && <h2>{file.filename}</h2> }
@@ -44,8 +39,8 @@ export default class PageList extends Component {
         {loading && <h3>Loading ...</h3>}
         {!pages.length ? null : (
           <ol>
-            {pages.map(page => (
-              <li className="page" onClick={this.curryOnPageClick(page.filename)} key={page.filename}>
+            {pages.map((page, index) => (
+              <li className={c("page", { highlighted: (index + 1) === currentPage })} onClick={this.curryOnPageClick(page.filename)} key={page.filename}>
                 {page.filename}
               </li>
             ))}

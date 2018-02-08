@@ -14,12 +14,16 @@ html, body {
   height: 50px;
   position: absolute;
   padding: 8px;
-  width: 100%; }
+  width: 100%;
+  display: flex; }
   .toolbar .toolbar-browse {
+    width: 33%;
     text-align: left; }
   .toolbar .toolbar-files {
+    width: 33%;
     text-align: center; }
   .toolbar .toolbar-main {
+    width: 33%;
     text-align: right; }
 
 .app-body {

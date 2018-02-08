@@ -3,23 +3,15 @@ import { join as joinPath } from 'path';
 import { encodePath } from '../../utils';
 import c from 'classnames';
 
-const ROOT = 'http://cz-api.csli.me/files';
-
 export default class FileList extends Component {
   state = { files: [], openFiles: {}, loading: false, open: false };
   files = {};
-
-  componentDidMount () {
-    if (this.props.autoload) {
-      this.load();
-    }
-  }
 
   async load () {
     const path = this.props.path;
     this.setState({ loading: true, open: true });
     try {
-      const response = await fetch(`${ROOT}/${encodePath(path)}`);
+      const response = await fetch(`${this.props.config.root}/${encodePath(path)}`);
       const files = await response.json();
 
       this.setState({ files, loading: false });
@@ -59,7 +51,7 @@ export default class FileList extends Component {
   }
 
   render () {
-    const { path, children, open } = this.props;
+    const { path, children } = this.props;
     const { loading, files } = this.state;
     return (
       <div className="file-list">
@@ -74,7 +66,7 @@ export default class FileList extends Component {
                   {file.filename}
                 </span>
                 <div className={c("folder-contents", { open: this.state.openFiles[file.ino] })}>
-                  <FileList onFileClick={this.onFileClick} open={this.state.openFiles[file.ino]} ref={r => this.files[file.ino] = r} path={joinPath(path, file.filename)} />
+                  <FileList config={this.props.config} onFileClick={this.onFileClick} open={this.state.openFiles[file.ino]} ref={r => this.files[file.ino] = r} path={joinPath(path, file.filename)} />
                 </div>
               </div>
             ) : (

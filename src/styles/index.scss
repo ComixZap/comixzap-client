@@ -17,13 +17,17 @@ html, body {
   position: absolute;
   padding: 8px;
   width: 100%;
+  display: flex;
   .toolbar-browse {
+    width: 33%;
     text-align: left;
   }
   .toolbar-files {
+    width: 33%;
     text-align: center;
   }
   .toolbar-main {
+    width: 33%;
     text-align: right;
   }
 }
