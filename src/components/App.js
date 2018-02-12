@@ -72,7 +72,7 @@ export default class App extends Component {
     this.pagelist.load(path, file);
   }
 
-  onPageClick = (path, file, page) => {
+  onPageClick = (path, file, page, index) => {
     this.viewer.load(path, file, page);
   }
 

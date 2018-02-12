@@ -18,6 +18,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "eslint-plugin-react-app": "^1.0.2",
     "node-sass-chokidar": "0.0.3"
   }
 }

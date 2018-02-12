@@ -1,3 +1,1 @@
-export const encodePath = (path) => {
-  return path.split('/').map(chunk => encodeURIComponent(chunk)).join('/');
-}
+export const encodePath = path => path.split('/').map(chunk => encodeURIComponent(chunk)).join('/');

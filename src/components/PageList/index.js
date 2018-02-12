@@ -19,7 +19,7 @@ export default class PageList extends Component {
       const pagesList = await response.json();
       const pagesFiltered = pagesList.filter(page => (page.usize && EXTENSION_WHITELIST.includes(extname(page.filename.toLowerCase()))));
       const pages = sortBy(pagesFiltered, p => p.filename.toLowerCase());
-      this.setState({ loading: false, pages: pages, currentPage: 1 });
+      this.setState({ loading: false, pages, currentPage: 1 });
       if (pages.length) {
         this.props.onPageClick(path, file, pages[0].filename);
       }
@@ -29,14 +29,13 @@ export default class PageList extends Component {
   }
 
   curryOnPageClick = (index, page) => (event) => {
-    console.log(index)
     this.setState({ currentPage: index + 1 });
-    this.onPageClick(page);
+    this.onPageClick(page, index);
   }
 
-  onPageClick = (page) => {
+  onPageClick = (page, index) => {
     const { path, file } = this.state;
-    this.props.onPageClick(path, file, page);
+    this.props.onPageClick(path, file, page, index);
   }
 
   nextPage () {
@@ -45,7 +44,7 @@ export default class PageList extends Component {
     if (nextPage > pages.length) {
       return;
     }
-    const page = this.state.pages[nextPage - 1].filename;
+    const page = pages[nextPage - 1].filename;
     this.setState({ currentPage: nextPage });
     this.props.onPageClick(path, file, page);
   }
@@ -56,7 +55,7 @@ export default class PageList extends Component {
     if (nextPage < 1) {
       return;
     }
-    const page = this.state.pages[nextPage - 1].filename;
+    const page = pages[nextPage - 1].filename;
     this.setState({ currentPage: nextPage });
     this.props.onPageClick(path, file, page);
   }
@@ -66,7 +65,7 @@ export default class PageList extends Component {
     return (
       <div ref={r => this.root = r} className="page-list">
         {file && <h5>{file.filename}</h5> }
-        { error && <div style={{ color: 'red' }}>Error: {error}</div>}
+        {error && <div style={{ color: 'red' }}>Error: {error}</div>}
         {loading && <h6>Loading ...</h6>}
         {!pages.length ? null : (
           <ol>
