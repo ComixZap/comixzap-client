@@ -30,6 +30,9 @@ html, body {
     width: 33%;
     text-align: right;
   }
+   button {
+     margin-right: .5em;
+   }
 }
 
 .app-body {
@@ -63,6 +66,14 @@ html, body {
         display: block;
       }
     }
+
+    .fa-folder, .fa-folder-open {
+      color: moccasin;
+    }
+
+    .fa-file {
+      color: white;
+    }
   }
 
   .page-list {
@@ -72,6 +83,10 @@ html, body {
 
     .page {
       cursor: pointer;
+
+      &.highlighted {
+        background: yellow;
+      }
     }
   }
 

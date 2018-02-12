@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { join as joinPath } from 'path';
+import { join as joinPath, extname } from 'path';
 import { encodePath } from '../../utils';
+import sortBy from 'lodash/sortBy';
 import c from 'classnames';
+
+const EXTENSION_WHITELIST = ['.cbz', '.cbr', '.rar', '.zip'];
 
 export default class FileList extends Component {
   state = { files: [], openFiles: {}, loading: false, open: false };
@@ -12,8 +15,9 @@ export default class FileList extends Component {
     this.setState({ loading: true, open: true });
     try {
       const response = await fetch(`${this.props.config.root}/${encodePath(path)}`);
-      const files = await response.json();
-
+      const filesList = await response.json();
+      const filesFiltered = filesList.filter(file => file.directory || EXTENSION_WHITELIST.includes(extname(file.filename.toLowerCase())));
+      const files = sortBy(filesFiltered, (file) => [!file.directory, file.filename.toLowerCase()]);
       this.setState({ files, loading: false });
     } catch (err) {
       this.setState({loading: false, error: err });
@@ -62,7 +66,7 @@ export default class FileList extends Component {
             file.directory ? (
               <div key={file.ino} className="folder">
                 <span onClick={this.curryOnFolderClick(file.ino)}>
-                  <i className="icon">{this.state.openFiles[file.ino] ? "📂" : "📁"}</i>
+                  <i className={c('fa', this.state.openFiles[file.ino] ? 'fa-folder-open' : 'fa-folder')}></i>
                   {file.filename}
                 </span>
                 <div className={c("folder-contents", { open: this.state.openFiles[file.ino] })}>
@@ -72,7 +76,7 @@ export default class FileList extends Component {
             ) : (
               <div key={file.ino} className="file">
                 <span onClick={this.curryOnFileClick(file)}>
-                  <i className="icon">{"📙"}</i>
+                  <i className="fa fa-file"></i>
                   {file.filename}
                 </span>
               </div>

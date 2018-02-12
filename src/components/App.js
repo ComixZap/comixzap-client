@@ -90,8 +90,10 @@ export default class App extends Component {
       this.setState({ pages: !this.state.pages });
     }
     if (action === 'page-prev') {
+      this.pagelist.prevPage();
     }
     if (action === 'page-next') {
+      this.pagelist.nextPage();
     }
     if (action === 'settings') {
       this.setState({ overlay: 'set-root', error: 'Settings' });

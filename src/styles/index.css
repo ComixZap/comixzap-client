@@ -25,6 +25,8 @@ html, body {
   .toolbar .toolbar-main {
     width: 33%;
     text-align: right; }
+  .toolbar button {
+    margin-right: .5em; }
 
 .app-body {
   padding-top: 50px;
@@ -47,12 +49,18 @@ html, body {
       display: none; }
       .app-body .file-browser .folder-contents.open {
         display: block; }
+    .app-body .file-browser .fa-folder, .app-body .file-browser .fa-folder-open {
+      color: moccasin; }
+    .app-body .file-browser .fa-file {
+      color: white; }
   .app-body .page-list {
     transition: .3s linear;
     background-color: #999;
     overflow: auto; }
     .app-body .page-list .page {
       cursor: pointer; }
+      .app-body .page-list .page.highlighted {
+        background: yellow; }
   .app-body .image-viewer {
     background-color: #777;
     transition: .3s linear;
