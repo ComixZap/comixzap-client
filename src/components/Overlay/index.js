@@ -29,7 +29,7 @@ export default class Overlay extends Component {
       <form onSubmit={this.onSubmit}>
         <h1>{message}</h1>
         <div>
-          <label for="root">Api Root</label>
+          <label htmlFor="root">Api Root</label>
           <input name="root" className="form-control" placeholder="http://..." />
         </div>
         <input className="btn btn-primary" type="submit" value="Submit" />

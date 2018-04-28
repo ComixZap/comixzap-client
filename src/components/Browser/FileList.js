@@ -14,6 +14,7 @@ export default class FileList extends Component {
     const path = this.props.path;
     this.setState({ loading: true, open: true });
     try {
+      await new Promise(r => setTimeout(r, 5000));
       const response = await fetch(`${this.props.config.root}/${encodePath(path)}`);
       const filesList = await response.json();
       const filesFiltered = filesList.filter(file => file.directory || EXTENSION_WHITELIST.includes(extname(file.filename.toLowerCase())));
