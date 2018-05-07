@@ -14,7 +14,6 @@ export default class App extends Component {
   }
 
   async checkConfig () {
-    console.log(this.state.config)
     try {
       if (this.state.config && this.state.config.root) {
         return this.checkRoot(this.state.config.root);
@@ -63,8 +62,10 @@ export default class App extends Component {
   }
 
   async checkConfigJson () {
+    this.setState({ overlay: 'loading' });
     const response = await fetch('/config.json');
     const config = await response.json();
+    this.setState({ overlay: null });
     return config;
   }
 

@@ -38,6 +38,14 @@ export default class Overlay extends Component {
     );
   }
 
+  renderLoading () {
+    return (
+      <div>
+        <h1>Loading ...</h1>
+      </div>
+    );
+  }
+
   render () {
     const { type, message } = this.props;
 
@@ -47,6 +55,7 @@ export default class Overlay extends Component {
           <div className="modal-dialog">
             <div className="modal-content"> 
               <div className="modal-body"> 
+                {type === 'loading' && this.renderLoading() }
                 {type === 'set-root' && this.renderSetRoot(message)}
               </div>
             </div>
