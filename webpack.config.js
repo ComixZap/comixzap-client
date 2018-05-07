@@ -39,7 +39,7 @@ module.exports = {
       {
         test: /\.(s[ca]|c)ss$/,
         use: ExtractCss.extract({
-          use: ['css-loader', 'sass-loader', 'postcss-loader']
+          use: ['css-loader', 'sass-loader', /*'postcss-loader'*/]
         })
       }
     ]
