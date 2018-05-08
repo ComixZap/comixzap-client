@@ -66,20 +66,20 @@ export default class FileList extends Component {
           files.map(file => (
             file.directory ? (
               <div key={file.ino} className="folder">
-                <span onClick={this.curryOnFolderClick(file.ino)}>
+                <div onClick={this.curryOnFolderClick(file.ino)}>
                   <i className={c('fa', this.state.openFiles[file.ino] ? 'fa-folder-open' : 'fa-folder')}></i>
                   {file.filename}
-                </span>
+                </div>
                 <div className={c("folder-contents", { open: this.state.openFiles[file.ino] })}>
                   <FileList config={this.props.config} onFileClick={this.onFileClick} open={this.state.openFiles[file.ino]} ref={r => this.files[file.ino] = r} path={joinPath(path, file.filename)} />
                 </div>
               </div>
             ) : (
               <div key={file.ino} className="file">
-                <span onClick={this.curryOnFileClick(file)}>
+                <div onClick={this.curryOnFileClick(file)}>
                   <i className="fa fa-file"></i>
                   {file.filename}
-                </span>
+                </div>
               </div>
             )
           ))

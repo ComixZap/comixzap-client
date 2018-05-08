@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { join as joinPath } from 'path';
+import c from 'classnames';
 import { encodePath } from '../../utils';
 
 export default class Viewer extends Component {
@@ -30,9 +31,8 @@ export default class Viewer extends Component {
     const { image, loading, error, zoom } = this.state;
 
     return (
-      <div ref={r => this.root = r} className="image-viewer">
-        {loading && <div style={{ position: 'absolute' }}>Loading ...</div>}
-        {error && <div style={{ color: 'red' }}>{error}</div>}
+      <div ref={r => this.root = r} className={c("image-viewer", { loading })}>
+        {error && <div className="error-overlay">{error}</div>}
         <div className="image" onDoubleClick={this.onDoubleClick}>
           {image && <img title={this.props.page} alt={this.props.page} src={image} style={{ width: `${zoom}%`}} />}
         </div>

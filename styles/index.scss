@@ -3,6 +3,7 @@ html, body {
   box-sizing: border-box;
   margin: 0;
   height: 100%;
+  user-select: none;
 }
 
 #root {
@@ -53,6 +54,7 @@ html, body {
     transition: .3s linear;
     background-color: #bbb;
     overflow: auto;
+    padding: 0 .5rem;
 
     .folder, .file {
       > span {
@@ -85,6 +87,11 @@ html, body {
     background-color: #999;
     overflow: auto;
 
+    > ol {
+      margin-right: 1rem;
+      padding-left: 2rem;
+    }
+
     .page {
       cursor: pointer;
 
@@ -103,6 +110,13 @@ html, body {
       image {
         transition: .3s linear;
       }
+    }
+    &.loading .image {
+      opacity: 0.5;
+    }
+    .error-overlay {
+      background: rgba(255, 0, 0, 0.5);
+      color: #f00;
     }
   }
 }

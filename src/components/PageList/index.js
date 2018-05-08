@@ -12,7 +12,7 @@ export default class PageList extends Component {
   async load (path, file) {
     this.setState({ path, file });
     try {
-      this.props.onLoad();
+      this.props.onLoad([]);
       this.setState({ loading: true, pages: [], error: null });
       this.root.scrollTop = 0;
       const response = await fetch(`${this.props.config.root}/${encodePath(joinPath(path, file.filename))}?action=list`);
@@ -20,6 +20,7 @@ export default class PageList extends Component {
       const pagesFiltered = pagesList.filter(page => (page.usize && EXTENSION_WHITELIST.includes(extname(page.filename.toLowerCase()))));
       const pages = sortBy(pagesFiltered, p => p.filename.toLowerCase());
       this.setState({ loading: false, pages, currentPage: 1 });
+      this.props.onLoad(pages);
       if (pages.length) {
         this.props.onPageClick(path, file, pages[0].filename);
       }

@@ -7,7 +7,7 @@ import PageList from './PageList';
 import Viewer from './Viewer';
 
 export default class App extends Component {
-  state = { pages: false, files: true, config: {} };
+  state = { pages: false, files: true, config: {}, activePages: [] };
 
   componentDidMount () {
     this.checkConfig();
@@ -27,7 +27,6 @@ export default class App extends Component {
       }
       this.setState({ config });
     } catch (err) {
-      console.log(err);
       this.setState({ overlay: 'set-root', error: 'Please enter a server URL' });
     }
 
@@ -54,7 +53,6 @@ export default class App extends Component {
         return;
       }
       const config = JSON.parse(storageStr);
-      console.log(config);
       return config;
     } catch (err) {
       console.warn(err);
@@ -77,9 +75,13 @@ export default class App extends Component {
     this.viewer.load(path, file, page);
   }
 
-  onPageLoad = () => {
+  onPageLoad = (activePages) => {
+    this.setState({ activePages });
     if (!this.state.pages) {
       this.setState({ pages: true });
+    }
+    if (this.state.files) {
+      this.setState({ files: false });
     }
   }
 
@@ -124,12 +126,12 @@ export default class App extends Component {
   }
 
   render() {
-    const { pages, files, config, overlay, error } = this.state;
+    const { pages, files, config, overlay, error, activePages } = this.state;
 
     return (
       <div className="app">
         <Overlay ref={r => this.overlay = r} type={overlay} message={error} onSubmit={this.onOverlaySubmit} onCancel={this.onCancelOverlay} />
-        <Toolbar config={config} onClick={this.onToolbarClick} ref={r => this.toolbar = r} />
+        <Toolbar config={config} onClick={this.onToolbarClick} ref={r => this.toolbar = r} activePages={activePages} />
         <div className={c("app-body", { pages, files })}>
           <Browser config={config} ref={r => this.browser = r} onFileClick={this.onFileClick} />
           <PageList config={config} ref={r => this.pagelist = r} onPageClick={this.onPageClick} onLoad={this.onPageLoad} />
