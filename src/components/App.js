@@ -35,9 +35,9 @@ export default class App extends Component {
 
   async checkRoot (root) {
     try {
-      const response = await fetch(root);
-      const files = await response.json();
-      if (!Array.isArray(files)) {
+      const response = await fetch(root + '/ping');
+      const text = await response.text();
+      if (text !== '1') {
         throw new Error('Could not get file list');
       }
       this.browser.load();

@@ -9,7 +9,7 @@ export default class Viewer extends Component {
   async load (path, file, page) {
     this.setState({ loading: true, page });
     try {
-      const image = `${this.props.config.root}/${encodePath(joinPath(path, file.filename))}?action=extract&extract=${encodePath(page)}`;
+      const image = `${this.props.config.root}/files/${encodePath(joinPath(path, file.filename))}?action=extract&extract=${encodePath(page)}`;
       await new Promise((resolve, reject) => {
         const img = new Image();
         img.src = image;
