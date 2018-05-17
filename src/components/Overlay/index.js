@@ -25,12 +25,13 @@ export default class Overlay extends Component {
   }
 
   renderSetRoot (message) {
+    const { config } = this.props;
     return (
       <form onSubmit={this.onSubmit}>
         <h1>{message}</h1>
         <div>
           <label htmlFor="root">Api Root</label>
-          <input name="root" className="form-control" placeholder="http://..." />
+          <input name="root" value={config.root} className="form-control" placeholder="http://..." />
         </div>
         <input className="btn btn-primary" type="submit" value="Submit" />
         <button className="btn btn-danger" onClick={this.onCancelClick}>Cancel</button>

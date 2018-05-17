@@ -130,7 +130,7 @@ export default class App extends Component {
 
     return (
       <div className="app">
-        <Overlay ref={r => this.overlay = r} type={overlay} message={error} onSubmit={this.onOverlaySubmit} onCancel={this.onCancelOverlay} />
+        <Overlay ref={r => this.overlay = r} type={overlay} config={config} message={error} onSubmit={this.onOverlaySubmit} onCancel={this.onCancelOverlay} />
         <Toolbar config={config} onClick={this.onToolbarClick} ref={r => this.toolbar = r} activePages={activePages} />
         <div className={c("app-body", { pages, files })}>
           <Browser config={config} ref={r => this.browser = r} onFileClick={this.onFileClick} />
