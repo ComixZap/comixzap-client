@@ -35,13 +35,13 @@ export default class App extends Component {
 
   async checkRoot (root) {
     try {
-      const response = await fetch(root + '/ping');
-      const text = await response.text();
-      if (text !== '1') {
+      const response = await fetch(root, { method: 'HEAD' });
+      if (response.statusCode > 299) {
         throw new Error('Could not get file list');
       }
       this.browser.load();
     } catch (err) {
+      console.error(err);
       this.setState({ overlay: 'set-root', error: 'Could not get file list, please re-enter root' });
     }
   }
@@ -112,7 +112,6 @@ export default class App extends Component {
       this.setState({
         config: newconfig
       });
-      console.log(this.state.config);
       localStorage.setItem('comixzap-config', JSON.stringify(newconfig));
 
       this.checkRoot(payload.root);
