@@ -107,6 +107,7 @@ html, body {
     overflow: auto;
     .image {
       display: block;
+      text-align: center;
       image {
         transition: .3s linear;
       }

@@ -18,12 +18,12 @@ export default class PageList extends Component {
       console.log(path, file.filename)
       const response = await fetch(`${this.props.config.root}${encodePath(joinPath(path, file.filename))}?action=contents`);
       const pagesList = await response.json();
-      const pagesFiltered = pagesList.files.filter(page => (page.size && EXTENSION_WHITELIST.includes(extname(page.name.toLowerCase()))));
-      const pages = sortBy(pagesFiltered, p => p.name.toLowerCase());
+      const pagesFiltered = pagesList.files.filter(page => (page.usize && EXTENSION_WHITELIST.includes(extname(page.filename.toLowerCase()))));
+      const pages = sortBy(pagesFiltered, p => p.filename.toLowerCase());
       this.setState({ loading: false, pages, currentPage: 1 });
       this.props.onLoad(pages);
       if (pages.length) {
-        this.props.onPageClick(path, file, pages[0].name);
+        this.props.onPageClick(path, file, pages[0].filename);
       }
     } catch (err) {
       this.setState({ loading: false, error: err.message });
@@ -46,7 +46,7 @@ export default class PageList extends Component {
     if (nextPage > pages.length) {
       return;
     }
-    const page = pages[nextPage - 1].name;
+    const page = pages[nextPage - 1].filename;
     this.setState({ currentPage: nextPage });
     this.props.onPageClick(path, file, page);
   }
@@ -57,7 +57,7 @@ export default class PageList extends Component {
     if (nextPage < 1) {
       return;
     }
-    const page = pages[nextPage - 1].name;
+    const page = pages[nextPage - 1].filename;
     this.setState({ currentPage: nextPage });
     this.props.onPageClick(path, file, page);
   }
@@ -66,14 +66,14 @@ export default class PageList extends Component {
     const { file, error, loading, pages, currentPage } = this.state;
     return (
       <div ref={r => this.root = r} className="page-list">
-        {file && <h5>{file.name}</h5> }
+        {file && <h5>{file.filename}</h5> }
         {error && <div style={{ color: 'red' }}>Error: {error}</div>}
         {loading && <h6>Loading ...</h6>}
         {!pages.length ? null : (
           <ol>
             {pages.map((page, index) => (
-              <li className={c("page", { highlighted: (index + 1) === currentPage })} onClick={this.curryOnPageClick(index, page.name)} key={page.name}>
-                {page.name}
+              <li className={c("page", { highlighted: (index + 1) === currentPage })} onClick={this.curryOnPageClick(index, page.filename)} key={page.filename}>
+                {page.filename}
               </li>
             ))}
           </ol>
