@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { basename, dirname } from 'path';
+import { createBrowserHistory, createHashHistory } from 'history';
+import { supportsHistory } from 'history/DOMUtils';
 import c from 'classnames';
 import Overlay from './Overlay';
 import Toolbar from './Toolbar';
@@ -6,11 +9,19 @@ import Browser from './Browser';
 import PageList from './PageList';
 import Viewer from './Viewer';
 
+const history = supportsHistory() ? createBrowserHistory() : createHashHistory();
+
 export default class App extends Component {
   state = { pages: false, files: true, config: {}, activePages: [] };
 
   componentDidMount () {
     this.checkConfig();
+
+    history.listen((location, action) => {
+      if (action === "POP") {
+        this.checkRoute();
+      }
+    });
   }
 
   async checkConfig () {
@@ -44,6 +55,16 @@ export default class App extends Component {
       console.error(err);
       this.setState({ overlay: 'set-root', error: 'Could not get file list, please re-enter root' });
     }
+    this.checkRoute();
+  }
+
+  async checkRoute () {
+    const [ filepath, page ] = history.location.pathname.split('::');
+    if (filepath != '/') {
+      const base = basename(filepath);
+      const dir = dirname(filepath);
+      this.pagelist.load(dir, { filename: base }, +page || 0);
+    }
   }
 
   async checkConfigStorage () {
@@ -69,10 +90,16 @@ export default class App extends Component {
 
   onFileClick = (path, file) => {
     this.pagelist.load(path, file);
+    history.push(encodeURI(path + '/' + file.filename));
   }
 
   onPageClick = (path, file, page, index) => {
     this.viewer.load(path, file, page);
+    this.setState({ index });
+    const newPath = path + '/' + file.filename + '::' + (index || 0);
+    if (newPath != history.location.pathname) {
+      history.push(encodeURI(newPath));
+    }
   }
 
   onPageLoad = (activePages) => {
@@ -125,12 +152,12 @@ export default class App extends Component {
   }
 
   render() {
-    const { pages, files, config, overlay, error, activePages } = this.state;
+    const { pages, files, config, overlay, error, activePages, index } = this.state;
 
     return (
       <div className="app">
         <Overlay ref={r => this.overlay = r} type={overlay} config={config} message={error} onSubmit={this.onOverlaySubmit} onCancel={this.onCancelOverlay} />
-        <Toolbar config={config} onClick={this.onToolbarClick} ref={r => this.toolbar = r} activePages={activePages} />
+        <Toolbar config={config} onClick={this.onToolbarClick} ref={r => this.toolbar = r} activePages={activePages} index={index} />
         <div className={c("app-body", { pages, files })}>
           <Browser config={config} ref={r => this.browser = r} onFileClick={this.onFileClick} />
           <PageList config={config} ref={r => this.pagelist = r} onPageClick={this.onPageClick} onLoad={this.onPageLoad} />

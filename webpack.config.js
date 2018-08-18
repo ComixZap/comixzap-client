@@ -45,6 +45,9 @@ module.exports = {
     ]
   },
   devServer: {
+    historyApiFallback: {
+      disableDotRule: true
+    },
     contentBase: path.join(__dirname, "public"),
     host: '0.0.0.0', // so I can test on other devices
   },

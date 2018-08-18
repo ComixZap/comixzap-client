@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "classnames": "^2.2.6",
+    "history": "^4.7.2",
     "lodash": "^4.17.10",
     "nock": "^9.5.0",
     "react": "^16.4.2",

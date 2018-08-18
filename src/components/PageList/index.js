@@ -9,21 +9,23 @@ const EXTENSION_WHITELIST = ['.jpeg', '.jpg', '.png', '.tif', '.tiff', '.tga', '
 export default class PageList extends Component {
   state = { pages: [] };
 
-  async load (path, file) {
-    this.setState({ path, file });
+  async load (path, file, index = 0) {
     try {
-      this.props.onLoad([]);
-      this.setState({ loading: true, pages: [], error: null });
-      this.root.scrollTop = 0;
-      console.log(path, file.filename)
-      const response = await fetch(`${this.props.config.root}${encodePath(joinPath(path, file.filename))}?action=contents`);
-      const pagesList = await response.json();
-      const pagesFiltered = pagesList.files.filter(page => (page.usize && EXTENSION_WHITELIST.includes(extname(page.filename.toLowerCase()))));
-      const pages = sortBy(pagesFiltered, p => p.filename.toLowerCase());
-      this.setState({ loading: false, pages, currentPage: 1 });
-      this.props.onLoad(pages);
+      let pages = this.state.pages;
+      if (this.state.path != path || this.state.file.filename != file.filename) {
+        this.props.onLoad([]);
+        this.setState({ loading: true, pages: [], error: null });
+        this.root.scrollTop = 0;
+        const response = await fetch(`${this.props.config.root}${encodePath(joinPath(path, file.filename))}?action=contents`);
+        const pagesList = await response.json();
+        const pagesFiltered = pagesList.files.filter(page => (page.usize && EXTENSION_WHITELIST.includes(extname(page.filename.toLowerCase()))));
+        pages = sortBy(pagesFiltered, p => p.filename.toLowerCase());
+        this.setState({ loading: false, path, file, pages });
+        this.props.onLoad(pages);
+      }
       if (pages.length) {
-        this.props.onPageClick(path, file, pages[0].filename);
+        this.setState({currentPage: index + 1 });
+        this.props.onPageClick(path, file, pages[index].filename, index);
       }
     } catch (err) {
       this.setState({ loading: false, error: err.message });
@@ -48,7 +50,7 @@ export default class PageList extends Component {
     }
     const page = pages[nextPage - 1].filename;
     this.setState({ currentPage: nextPage });
-    this.props.onPageClick(path, file, page);
+    this.props.onPageClick(path, file, page, nextPage - 1);
   }
 
   prevPage () {
@@ -59,7 +61,7 @@ export default class PageList extends Component {
     }
     const page = pages[nextPage - 1].filename;
     this.setState({ currentPage: nextPage });
-    this.props.onPageClick(path, file, page);
+    this.props.onPageClick(path, file, page, nextPage - 1);
   }
 
   render () {
