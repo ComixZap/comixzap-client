@@ -8,6 +8,7 @@ import Toolbar from './Toolbar';
 import Browser from './Browser';
 import PageList from './PageList';
 import Viewer from './Viewer';
+import { encodePath, decodePath } from '../utils';
 
 const history = supportsHistory() ? createBrowserHistory() : createHashHistory();
 
@@ -59,10 +60,10 @@ export default class App extends Component {
   }
 
   async checkRoute () {
-    const [ filepath, page ] = history.location.pathname.split('::');
+    const [ filepath, page ] = window.location.pathname.split('::');
     if (filepath != '/') {
-      const base = basename(filepath);
-      const dir = dirname(filepath);
+      const base = decodePath(basename(filepath));
+      const dir = decodePath(dirname(filepath));
       this.pagelist.load(dir, { filename: base }, +page || 0);
     }
   }
@@ -90,15 +91,14 @@ export default class App extends Component {
 
   onFileClick = (path, file) => {
     this.pagelist.load(path, file);
-    history.push(encodeURI(path + '/' + file.filename));
   }
 
   onPageClick = (path, file, page, index) => {
     this.viewer.load(path, file, page);
     this.setState({ index });
-    const newPath = path + '/' + file.filename + '::' + (index || 0);
-    if (newPath != history.location.pathname) {
-      history.push(encodeURI(newPath));
+    const newPath = encodePath(path + '/' + file.filename) + '::' + (index || 0);
+    if (newPath != window.location.pathname) {
+      history.push(newPath);
     }
   }
 
