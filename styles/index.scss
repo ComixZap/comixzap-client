@@ -54,7 +54,9 @@ html, body {
     transition: .3s linear;
     background-color: #bbb;
     overflow: auto;
-    padding: 0 .5rem;
+    .wrapper {
+      padding: 0 .5rem;
+    }
 
     .folder, .file {
       > span {
@@ -127,11 +129,11 @@ html, body {
     flex-direction: column;
 
     &.files .file-browser {
-      height: 50%;
+      height: 33.333333%;
     }
   
     &.pages .page-list {
-      height: 50%;
+      height: 33.333333%;
     }
 
     &.pages.files .file-browser,
@@ -141,7 +143,7 @@ html, body {
 
     &.files .image-viewer,
     &.pages .image-viewer {
-      height: 50%;
+      height: 66.666666%;
     }
 
 
@@ -170,11 +172,11 @@ html, body {
     flex-direction: row;
 
     &.files .file-browser {
-      width: 50%;
+      width: 33.333333%;
     }
   
     &.pages .page-list {
-      width: 50%;
+      width: 33.333333%;
     }
 
     &.pages.files .file-browser,
@@ -184,7 +186,7 @@ html, body {
 
     &.files .image-viewer,
     &.pages .image-viewer {
-      width: 50%;
+      width: 66.666666%;
     }
   
     &.pages.files .image-viewer {

@@ -3,8 +3,6 @@ import { join as joinPath } from 'path';
 import c from 'classnames';
 import { encodePath } from '../../utils';
 
-const supportsTouch = 'ontouchstart' in window;
-
 const calcDistance = (x1, y1, x2, y2) => Math.pow(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2), .5);
 
 export default class Viewer extends Component {
@@ -43,7 +41,7 @@ export default class Viewer extends Component {
   }
 
   onTouchStart = (e) => {
-    if (e.touches.length == 2) {
+    if (e.touches.length === 2) {
       const touch1 = e.touches[0];
       const touch2 = e.touches[1];
       this.initialDistance = calcDistance(touch1.screenX, touch1.screenY, touch2.screenX, touch2.screenY);

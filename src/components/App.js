@@ -61,7 +61,7 @@ export default class App extends Component {
 
   async checkRoute () {
     const [ filepath, page ] = window.location.pathname.split('::');
-    if (filepath != '/') {
+    if (filepath !== '/') {
       const base = decodePath(basename(filepath));
       const dir = decodePath(dirname(filepath));
       this.pagelist.load(dir, { filename: base }, +page || 0);
@@ -97,9 +97,10 @@ export default class App extends Component {
     this.viewer.load(path, file, page);
     this.setState({ index });
     const newPath = encodePath(path + '/' + file.filename) + '::' + (index || 0);
-    if (newPath != window.location.pathname) {
+    if (newPath !== window.location.pathname) {
       history.push(newPath);
     }
+    document.title = `ComixZap Viewer - ${file.filename} Page ${index}`;
   }
 
   onPageLoad = (activePages) => {
@@ -114,10 +115,10 @@ export default class App extends Component {
 
   onToolbarClick = (action) => {
     if (action === 'hide-files') {
-      this.setState({ files: !this.state.files });
+      this.setState({ files: !this.state.files, pages: false });
     }
     if (action === 'hide-pages') {
-      this.setState({ pages: !this.state.pages });
+      this.setState({ pages: !this.state.pages, files: false });
     }
     if (action === 'page-prev') {
       this.pagelist.prevPage();

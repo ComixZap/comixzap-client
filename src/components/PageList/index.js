@@ -12,7 +12,7 @@ export default class PageList extends Component {
   async load (path, file, index = 0) {
     try {
       let pages = this.state.pages;
-      if (this.state.path != path || this.state.file.filename != file.filename) {
+      if (this.state.path !== path || this.state.file.filename !== file.filename) {
         this.props.onLoad([]);
         this.setState({ loading: true, pages: [], error: null });
         this.root.scrollTop = 0;
