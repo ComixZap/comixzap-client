@@ -41,6 +41,10 @@ module.exports = {
         use: ExtractCss.extract({
           use: ['css-loader', 'sass-loader', /*'postcss-loader'*/]
         })
+      },
+      {
+        test: /\.woff$/,
+        use: 'url-loader'
       }
     ]
   },
