@@ -27,20 +27,15 @@ html, body {
   width: 100%;
   display: flex;
   .toolbar-browse {
-    width: 33%;
     text-align: left;
   }
   .toolbar-files {
-    width: 33%;
+    flex: 1;
     text-align: center;
   }
   .toolbar-main {
-    width: 33%;
     text-align: right;
   }
-   button {
-     margin-right: .5em;
-   }
 }
 
 .app-body {
