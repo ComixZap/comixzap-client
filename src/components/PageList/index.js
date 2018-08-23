@@ -18,7 +18,7 @@ export default class PageList extends Component {
         this.root.scrollTop = 0;
         const response = await fetch(`${this.props.config.root}${encodePath(joinPath(path, file.filename))}?action=contents`);
         const pagesList = await response.json();
-        const pagesFiltered = pagesList.files.filter(page => (page.usize && EXTENSION_WHITELIST.includes(extname(page.filename.toLowerCase()))));
+        const pagesFiltered = pagesList.files.filter(page => (page.usize && !page.filename.match(/^__MACOSX/) && EXTENSION_WHITELIST.includes(extname(page.filename.toLowerCase()))));
         pages = sortBy(pagesFiltered, p => p.filename.toLowerCase());
         this.setState({ loading: false, path, file, pages });
         this.props.onLoad(pages);
