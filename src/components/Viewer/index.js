@@ -28,7 +28,7 @@ export default class Viewer extends Component {
   }
 
   onWheel = (e) => {
-    if (e.shiftKey) {
+    if (e.shiftKey || e.ctrlKey) {
       e.preventDefault();
       const total = e.deltaX + e.deltaY;
       this.setState({ zoom: minMax(5, 1000, this.state.zoom + total) });
