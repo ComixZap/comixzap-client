@@ -30,20 +30,20 @@ export default class FileList extends Component {
     this.load();
   }
 
-  toggleOpen (ino) {
+  toggleOpen (filename) {
     this.setState({
       openFiles: {
         ...this.state.openFiles,
-        [ino]: !this.state.openFiles[ino]
+        [filename]: !this.state.openFiles[filename]
       }
     });
   }
 
-  curryOnFolderClick = (ino) => (event) => {
-    if (!this.state.openFiles[ino]) {
-      this.files[ino].load();
+  curryOnFolderClick = (filename) => (event) => {
+    if (!this.state.openFiles[filename]) {
+      this.files[filename].load();
     }
-    this.toggleOpen(ino);
+    this.toggleOpen(filename);
   }
 
   curryOnFileClick = (file) => (event) => {
@@ -64,17 +64,17 @@ export default class FileList extends Component {
         {
           files.map(file => (
             file.directory ? (
-              <div key={file.ino} className="folder">
-                <div onClick={this.curryOnFolderClick(file.ino)}>
-                  <i className={c('fa', this.state.openFiles[file.ino] ? 'fa-folder-open' : 'fa-folder')}></i>
+              <div key={file.filename} className="folder">
+                <div onClick={this.curryOnFolderClick(file.filename)}>
+                  <i className={c('fa', this.state.openFiles[file.filename] ? 'fa-folder-open' : 'fa-folder')}></i>
                   {file.filename}
                 </div>
-                <div className={c("folder-contents", { open: this.state.openFiles[file.ino] })}>
-                  <FileList config={this.props.config} onFileClick={this.onFileClick} open={this.state.openFiles[file.ino]} ref={r => this.files[file.ino] = r} path={joinPath(path, file.filename)} />
+                <div className={c("folder-contents", { open: this.state.openFiles[file.filename] })}>
+                  <FileList config={this.props.config} onFileClick={this.onFileClick} open={this.state.openFiles[file.filename]} ref={r => this.files[file.filename] = r} path={joinPath(path, file.filename)} />
                 </div>
               </div>
             ) : (
-              <div key={file.ino} className="file">
+              <div key={file.filename} className="file">
                 <div onClick={this.curryOnFileClick(file)}>
                   <i className="fa fa-file"></i>
                   {file.filename}

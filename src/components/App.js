@@ -65,6 +65,7 @@ export default class App extends Component {
       const base = decodePath(basename(filepath));
       const dir = decodePath(dirname(filepath));
       this.pagelist.load(dir, { filename: base }, +page || 0);
+      this.browser.setCurrent(dir, base);
     }
   }
 
