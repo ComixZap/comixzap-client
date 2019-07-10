@@ -38,25 +38,26 @@ export default class App extends Component {
         throw new Error('No API root found');
       }
       this.setState({ config });
+      this.checkRoot(this.state.config.root);
     } catch (err) {
       this.setState({ overlay: 'set-root', error: 'Please enter a server URL' });
     }
-
-    this.checkRoot(this.state.config.root);
   }
 
   async checkRoot (root) {
     try {
+      this.setState({ overlay: 'loading' });
       const response = await fetch(root, { method: 'HEAD' });
       if (response.statusCode > 299) {
         throw new Error('Could not get file list');
       }
+      this.setState({ overlay: null });
       this.browser.load();
+      this.checkRoute();
     } catch (err) {
       console.error(err);
       this.setState({ overlay: 'set-root', error: 'Could not get file list, please re-enter root' });
     }
-    this.checkRoute();
   }
 
   async checkRoute () {
