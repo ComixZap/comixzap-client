@@ -1,0 +1,4 @@
+client:
+  root: /api
+server:
+  root: /mnt/external2/Comics

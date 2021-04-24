@@ -1,5 +1,9 @@
+const isProduction = process.env.NODE_ENV == 'production';
+
 module.exports = {
   plugins: {
-    'autoprefixer': {}
+    'postcss-import': {},
+    'postcss-node-sass': { outputStyle: isProduction ? 'compressed' : 'nested' },
+    'autoprefixer': {},
   }
 }

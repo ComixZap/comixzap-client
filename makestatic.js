@@ -1,7 +1,7 @@
 const fs = require('fs');
 
-const textFiles = [ 'index.html', 'style.css', 'main.js' ];
-const binFiles = [ 'favicon.ico' ];
+const textFiles = [ 'index.html', 'index.css', 'index.js' ];
+const binFiles = [ 'favicon.ico', 'fontawesome-webfont.woff' ];
 
 const json = []; 
 textFiles.forEach((filename) => {

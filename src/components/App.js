@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { basename, dirname } from 'path';
 import { createBrowserHistory, createHashHistory } from 'history';
-import { supportsHistory } from 'history/DOMUtils';
 import c from 'classnames';
 import Overlay from './Overlay';
 import Toolbar from './Toolbar';
@@ -10,7 +9,8 @@ import PageList from './PageList';
 import Viewer from './Viewer';
 import { encodePath, decodePath } from '../utils';
 
-const history = supportsHistory() ? createBrowserHistory() : createHashHistory();
+const supportsHistory = window.history && 'pushState' in window.history;
+const history = supportsHistory ? createBrowserHistory() : createHashHistory();
 
 export default class App extends Component {
   state = { pages: false, files: true, config: {}, activePages: [] };

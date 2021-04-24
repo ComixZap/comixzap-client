@@ -8,8 +8,11 @@ let config;
 try {
   const configFile = fs.readFileSync(__dirname + '/config.yml');
   config = yaml.load(configFile);
-  if (!config.root) {
-    throw new Error('config.yml requires `root` parameter');
+  if (!config.client) {
+    throw new Error('config.yml requires `client` parameter');
+  }
+  if (!config.client.root) {
+    throw new Error('config.yml requires `client.root` parameter');
   }
 } catch (err) {
   console.log(err.name)
@@ -23,7 +26,7 @@ try {
   process.exit(1);
 }
 
-const configString = JSON.stringify(config);
+const configString = JSON.stringify(config.client);
 app.get('/config.json', (req, res) => res.end(configString));
 
 Object.keys(files).forEach((filename) => {
@@ -31,6 +34,12 @@ Object.keys(files).forEach((filename) => {
     res.end(files[filename]);
   });
 });
+
+
+if (config.server) {
+  const filesApi = require('files-api/api');
+  app.use('/api', filesApi(config.server.root));
+}
 
 app.use((req, res) => {
   res.end(files['index.html']);
