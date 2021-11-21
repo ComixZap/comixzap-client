@@ -49,6 +49,7 @@ module.exports = {
     ]
   },
   devServer: {
+    allowedHosts: 'all',
     historyApiFallback: {
       disableDotRule: true
     },

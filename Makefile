@@ -15,7 +15,7 @@ build/index.css: build
 	$(binroot)/postcss styles/index.scss -o build/index.css
 
 build/index.html: build
-	$(binroot)/pug views/index.pug -o build/
+	$(binroot)/pug3 views/index.pug -o build/
 
 build/favicon.ico: build
 	cp public/favicon.ico build/
@@ -28,6 +28,8 @@ static-files.js: build/manifest
 
 package: static-files.js
 
+repackage: clean package
+
 clean:
 	-rm -rf build
 	-rm static-files.js
@@ -35,4 +37,4 @@ clean:
 image: static-files.js
 	docker build -f Dockerfile . -t coverslide/comixzap-single:latest
 
-.PHONY: default image clean
+.PHONY: default image clean package repackage

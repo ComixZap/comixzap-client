@@ -7,6 +7,7 @@ import { encodePath } from '../../utils';
 const EXTENSION_WHITELIST = ['.jpeg', '.jpg', '.png', '.tif', '.tiff', '.tga', '.bmp', '.gif'];
 
 export default class PageList extends Component {
+  root = React.createRef();
   state = { pages: [] };
 
   async load (path, file, index = 0) {
@@ -15,7 +16,7 @@ export default class PageList extends Component {
       if (this.state.path !== path || this.state.file.filename !== file.filename) {
         this.props.onLoad([]);
         this.setState({ loading: true, pages: [], error: null });
-        this.root.scrollTop = 0;
+        this.root.current.scrollTop = 0;
         const response = await fetch(`${this.props.config.root}${encodePath(joinPath(path, file.filename))}?action=contents`);
         const pagesList = await response.json();
         const pagesFiltered = pagesList.files.filter(page => (page.usize && !page.filename.match(/^__MACOSX/) && EXTENSION_WHITELIST.includes(extname(page.filename.toLowerCase()))));
@@ -39,7 +40,23 @@ export default class PageList extends Component {
 
   onPageClick = (page, index) => {
     const { path, file } = this.state;
-    this.props.onPageClick(path, file, page, index);
+    this.props.onPageClick(path, file, page, index, true);
+  }
+
+  scroll (index) {
+    const root = this.root.current;
+    const page = root.querySelectorAll(".page")[index];
+    if (page) {
+      const rootPos = root.getBoundingClientRect();
+      const rootChildPos = root.childNodes[0].getBoundingClientRect();
+      const pagePos = page.getBoundingClientRect();
+
+      const offsetTop = pagePos.top - rootChildPos.top - rootPos.top;
+
+      console.log({ rootPos, pagePos, offsetTop });
+
+      this.root.current.scrollTop = offsetTop;
+    }
   }
 
   nextPage () {
@@ -67,7 +84,7 @@ export default class PageList extends Component {
   render () {
     const { file, error, loading, pages, currentPage } = this.state;
     return (
-      <div ref={r => this.root = r} className="page-list">
+      <div ref={this.root} className="page-list">
         {file && <h5>{file.filename}</h5> }
         {error && <div style={{ color: 'red' }}>Error: {error}</div>}
         {loading && <h6>Loading ...</h6>}

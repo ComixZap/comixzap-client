@@ -18,7 +18,8 @@ export default class App extends Component {
   componentDidMount () {
     this.checkConfig();
 
-    history.listen((location, action) => {
+    history.listen(({location, action}) => {
+      console.log(location, action)
       if (action === "POP") {
         this.checkRoute();
       }
@@ -95,14 +96,17 @@ export default class App extends Component {
     this.pagelist.load(path, file);
   }
 
-  onPageClick = (path, file, page, index) => {
+  onPageClick = (path, file, page, index, suppressScroll) => {
     this.viewer.load(path, file, page);
     this.setState({ index });
     const newPath = encodePath(path + '/' + file.filename) + '::' + (index || 0);
     if (newPath !== window.location.pathname) {
       history.push(newPath);
     }
-    document.title = `ComixZap Viewer - ${file.filename} Page ${index}`;
+    if (!suppressScroll) {
+      this.pagelist.scroll(index);
+    }
+    document.title = `ComixZap Viewer - ${file.filename} Page ${index+1}`;
   }
 
   onPageLoad = (activePages) => {
