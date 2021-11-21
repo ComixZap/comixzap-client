@@ -8,4 +8,4 @@ RUN npm i
 ENV NODE_ENV=production
 RUN make package
 
-ENTRYPOINT node server-single
+ENTRYPOINT node server

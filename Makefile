@@ -5,6 +5,9 @@ default: build/manifest
 build/manifest: build/index.js build/index.css build/favicon.ico build/index.html build/fontawesome-webfont.woff
 	touch build/manifest
 
+watch: build/manifest
+	$(binroot)/watchify -v -t babelify src/index.js -o build/index.js
+
 build:
 	mkdir -p build
 

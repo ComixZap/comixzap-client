@@ -34,7 +34,10 @@ export default class PageList extends Component {
   }
 
   pageCount() {
-    return this.props.pages.length;
+    if (!this.state.pages) {
+      return 0;
+    }
+    return this.state.pages.length;
   }
 
   curryOnPageClick = (index, page) => (event) => {
@@ -56,8 +59,6 @@ export default class PageList extends Component {
       const pagePos = page.getBoundingClientRect();
 
       const offsetTop = pagePos.top - rootChildPos.top - rootPos.top;
-
-      console.log({ rootPos, pagePos, offsetTop });
 
       this.root.current.scrollTop = offsetTop;
     }

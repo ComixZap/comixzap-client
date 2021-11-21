@@ -13,6 +13,10 @@ export default class Browser extends Component {
     this.props.onFileClick(path, file);
   }
 
+  onFolderClick = (path, filename) => {
+    this.props.onFolderClick(path, filename);
+  }
+
   setCurrent = (dir, filename) => {
     const path = [dir, filename].join('/');
     this.setState({ selected: path })
@@ -21,7 +25,7 @@ export default class Browser extends Component {
   render () {
     return (
       <div className="file-browser">
-        <FileList ref={r => this.root = r} selected={this.state.selected} config={this.props.config} onFileClick={this.onFileClick} open path="/" />
+        <FileList ref={r => this.root = r} selected={this.state.selected} config={this.props.config} onFolderClick={this.onFolderClick} onFileClick={this.onFileClick} open path="/" drillDown={this.props.drillDown}/>
       </div>
     )
   }

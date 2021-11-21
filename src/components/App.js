@@ -19,7 +19,6 @@ export default class App extends Component {
     this.checkConfig();
 
     history.listen(({location, action}) => {
-      console.log(location, action)
       if (action === "POP") {
         this.checkRoute();
       }
@@ -66,7 +65,7 @@ export default class App extends Component {
     if (filepath !== '/') {
       const base = decodePath(basename(filepath));
       const dir = decodePath(dirname(filepath));
-      this.pagelist.load(dir, { filename: base }, +page || 0);
+      this.pageList.load(dir, { filename: base }, +page || 0);
       this.browser.setCurrent(dir, base);
       this.setState({ drillDown: true });
     }
@@ -93,15 +92,21 @@ export default class App extends Component {
     return config;
   }
 
-  onFolderClick = (path) => {
+  onFolderClick = (path, filename) => {
+    this.setState({ drillDown: false });
     if (this.pageList.pageCount() == 0) {
-      this.browser.setCurrent(path);
+      // not sure why we get double slash on root.
+      // hacking this for now
+      if (path == "/") {
+        path = "";
+      }
+      this.browser.setCurrent(path, filename);
     }
   }
 
   onFileClick = (path, file) => {
-    console.log(path, file);
-    this.pagelist.load(path, file);
+    this.setState({ drillDown: false });
+    this.pageList.load(path, file);
     this.browser.setCurrent(path, file.filename);
   }
 
@@ -113,7 +118,7 @@ export default class App extends Component {
       history.push(newPath);
     }
     if (!suppressScroll) {
-      this.pagelist.scroll(index);
+      this.pageList.scroll(index);
     }
     document.title = `ComixZap Viewer - ${file.filename} Page ${index+1}`;
   }
@@ -136,10 +141,10 @@ export default class App extends Component {
       this.setState({ pages: !this.state.pages, files: false });
     }
     if (action === 'page-prev') {
-      this.pagelist.prevPage();
+      this.pageList.prevPage();
     }
     if (action === 'page-next') {
-      this.pagelist.nextPage();
+      this.pageList.nextPage();
     }
     if (action === 'settings') {
       this.setState({ overlay: 'set-root', error: 'Settings' });
@@ -176,7 +181,7 @@ export default class App extends Component {
         <Toolbar config={config} onClick={this.onToolbarClick} ref={r => this.toolbar = r} activePages={activePages} index={index} />
         <div className={c("app-body", { pages, files })}>
           <Browser config={config} ref={r => this.browser = r} onFileClick={this.onFileClick} onFolderClick={this.onFolderClick} drillDown={drillDown} />
-          <PageList config={config} ref={r => this.pagelist = r} onPageClick={this.onPageClick} onLoad={this.onPageLoad} />
+          <PageList config={config} ref={r => this.pageList = r} onPageClick={this.onPageClick} onLoad={this.onPageLoad} />
           <Viewer config={config} ref={r => this.viewer = r} />
         </div>
       </div>
