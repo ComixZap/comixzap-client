@@ -54,9 +54,33 @@ export default class FileList extends Component {
     this.props.onFileClick(path, file);
   }
 
+  onFolderClick = (path, file) => {
+    this.props.onFolderClick(path, file);
+  }
+
+  getSelectedChild (path, selected) {
+    if (!selected) {
+      return null;
+    }
+    const selectedParts = selected.replace(/^\//, '').split("/");
+    if (path == '' || path == '/') {
+      return  selectedParts[0];
+    }
+    const pathParts = path.replace(/^\//, '').split("/");
+    for (let i = 0 ; i < pathParts.length ; i++) {
+      if (pathParts[i] != selectedParts[i]) {
+        return null;
+      }
+    }
+    console.log(pathParts, selectedParts);
+    console.log(selectedParts[pathParts.length]);
+    return selectedParts[pathParts.length];
+  }
+
   render () {
-    const { path, children } = this.props;
+    const { path, children, selected } = this.props;
     const { loading, files } = this.state;
+    const selectedChild = this.getSelectedChild(path, selected);
     return (
       <div className="file-list">
         {loading && <div>Loading ...</div>}
@@ -65,16 +89,16 @@ export default class FileList extends Component {
           files.map(file => (
             file.directory ? (
               <div key={file.filename} className="folder">
-                <div onClick={this.curryOnFolderClick(file.filename)}>
+                <div onClick={this.curryOnFolderClick(file.filename)} className={c("folder", selectedChild == file.filename && "highlighted")}>
                   <i className={c('fa', this.state.openFiles[file.filename] ? 'fa-folder-open' : 'fa-folder')}></i>
                   {file.filename}
                 </div>
                 <div className={c("folder-contents", { open: this.state.openFiles[file.filename] })}>
-                  <FileList config={this.props.config} onFileClick={this.onFileClick} open={this.state.openFiles[file.filename]} ref={r => this.files[file.filename] = r} path={joinPath(path, file.filename)} />
+                  <FileList selected={this.props.selected} config={this.props.config} onFileClick={this.onFileClick} onFolderClick={this.onFileClick} open={this.state.openFiles[file.filename]} ref={r => this.files[file.filename] = r} path={joinPath(path, file.filename)} />
                 </div>
               </div>
             ) : (
-              <div key={file.filename} className="file">
+              <div key={file.filename} className={c("file", selectedChild == file.filename && "highlighted")}>
                 <div onClick={this.curryOnFileClick(file)}>
                   <i className="fa fa-file"></i>
                   {file.filename}

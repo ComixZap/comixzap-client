@@ -68,6 +68,7 @@ export default class App extends Component {
       const dir = decodePath(dirname(filepath));
       this.pagelist.load(dir, { filename: base }, +page || 0);
       this.browser.setCurrent(dir, base);
+      this.setState({ drillDown: true });
     }
   }
 
@@ -92,8 +93,16 @@ export default class App extends Component {
     return config;
   }
 
+  onFolderClick = (path) => {
+    if (this.pageList.pageCount() == 0) {
+      this.browser.setCurrent(path);
+    }
+  }
+
   onFileClick = (path, file) => {
+    console.log(path, file);
     this.pagelist.load(path, file);
+    this.browser.setCurrent(path, file.filename);
   }
 
   onPageClick = (path, file, page, index, suppressScroll) => {
@@ -159,14 +168,14 @@ export default class App extends Component {
   }
 
   render() {
-    const { pages, files, config, overlay, error, activePages, index } = this.state;
+    const { pages, files, config, overlay, error, activePages, index, drillDown } = this.state;
 
     return (
       <div className="app">
         <Overlay ref={r => this.overlay = r} type={overlay} config={config} message={error} onSubmit={this.onOverlaySubmit} onCancel={this.onCancelOverlay} />
         <Toolbar config={config} onClick={this.onToolbarClick} ref={r => this.toolbar = r} activePages={activePages} index={index} />
         <div className={c("app-body", { pages, files })}>
-          <Browser config={config} ref={r => this.browser = r} onFileClick={this.onFileClick} />
+          <Browser config={config} ref={r => this.browser = r} onFileClick={this.onFileClick} onFolderClick={this.onFolderClick} drillDown={drillDown} />
           <PageList config={config} ref={r => this.pagelist = r} onPageClick={this.onPageClick} onLoad={this.onPageLoad} />
           <Viewer config={config} ref={r => this.viewer = r} />
         </div>

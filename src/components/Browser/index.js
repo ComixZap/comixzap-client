@@ -14,7 +14,8 @@ export default class Browser extends Component {
   }
 
   setCurrent = (dir, filename) => {
-    this.setState({ selected: [dir, filename].join('/') })
+    const path = [dir, filename].join('/');
+    this.setState({ selected: path })
   }
 
   render () {

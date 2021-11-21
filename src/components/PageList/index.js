@@ -33,6 +33,10 @@ export default class PageList extends Component {
     }
   }
 
+  pageCount() {
+    return this.props.pages.length;
+  }
+
   curryOnPageClick = (index, page) => (event) => {
     this.setState({ currentPage: index + 1 });
     this.onPageClick(page, index);
