@@ -38,7 +38,7 @@
     "jest-enzyme": "^7.0.2",
     "js-yaml": "^3.13.1",
     "nexe": "^3.3.2",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "postcss-loader": "^3.0.0",
     "pug-html-loader": "^1.1.5",
     "raw-loader": "^3.0.0",
