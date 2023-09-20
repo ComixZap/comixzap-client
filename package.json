@@ -33,6 +33,6 @@
   },
   "optionalDependencies": {
     "express": "^4.17.1",
-    "files-api": "^2.0.3"
+    "files-api": "^2.0.5"
   }
 }
