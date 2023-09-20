@@ -40,6 +40,6 @@
   },
   "optionalDependencies": {
     "express": "^4.17.1",
-    "files-api": "^2.0.0"
+    "files-api": "^2.0.2"
   }
 }
