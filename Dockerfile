@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:alpine3.17
 
 RUN apk add make p7zip
 ADD . /app
